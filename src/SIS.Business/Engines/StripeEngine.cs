@@ -12,7 +12,7 @@ namespace RedStarter.Business.Engines
     {
         public async Task<bool> CreateCharge(PurchaseCreateChargeDTO dto)
         {
-            StripeConfiguration.SetApiKey("sk_test_gzQ0Q1iwmIIX4VqafJj9rcZe");
+            StripeConfiguration.SetApiKey("sk_test_WGWk6z9utu4sWhJDm52sS0yr");
             var token = dto.Token;
             var options = new ChargeCreateOptions
             {
