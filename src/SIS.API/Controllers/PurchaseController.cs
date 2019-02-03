@@ -28,25 +28,6 @@ namespace RedStarter.API.Controllers.Purchase
             _manager = manager;
         }
 
-        //[HttpPost]
-        //[Authorize] 
-        //public async Task<IActionResult> PostPurchase(PurchaseCreateRequest request)
-        //{
-
-        //    if (!ModelState.IsValid) 
-        //    {
-        //        return StatusCode(400);
-        //    }
-
-        //    var dto = _mapper.Map<PurchaseCreateDTO>(request);
-        //    dto.PurchaseDate = DateTime.Now;
-
-        //    if (await _manager.CreatePurchase(dto))
-        //        return StatusCode(201);
-
-        //    throw new Exception(); 
-        //}
-
         [HttpPost]
         [Route("CreateCharge")]
         public async Task<IActionResult> CreateCharge([FromBody]PurchaseCreateChargeRequest request)
@@ -54,66 +35,43 @@ namespace RedStarter.API.Controllers.Purchase
             var dtoToken = _mapper.Map<PurchaseCreateChargeDTO>(request);
             dtoToken.PurchaseDate = DateTime.Now;
             var success = await _manager.CreateCharge(dtoToken);
-
-            //if (success)
-            //    return 
-
             var success2 = await _manager.CreatePurchase(dtoToken);
             return Ok();
         }
 
-
         [HttpGet]
-        //[Authorize]
         public async Task<IActionResult> GetPurchases()
         {
-            if (!ModelState.IsValid) 
-            {
+            if (!ModelState.IsValid)
                 return StatusCode(400);
-            }
-
-            //var identityClaimNum = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var dto = await _manager.GetPurchases();
             var response = _mapper.Map<IEnumerable<PurchaseListItemResponse>>(dto);
-
-            return Ok(response); //TODO : Handle exceptions
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
-        //[Authorize]
         public async Task<IActionResult> GetPurchaseById(int id)
         {
             if (!ModelState.IsValid)
-            {
                 return StatusCode(400);
-            }
-
-            //var identityClaimNum = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var dto = await _manager.GetPurchaseById(id);
             var response = _mapper.Map<PurchaseListItemResponse>(dto);
-
-            return Ok(response); //TODO: Handle Exceptions
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
-        //[Authorize]
         public async Task<IActionResult> DeletePurchaseById(int id)
         {
             if (!ModelState.IsValid)
-            {
                 return StatusCode(400);
-            }
 
             if (await _manager.DeletePurchaseById(id))
                 return StatusCode(202);
-
-            throw new Exception();
+            else
+                return StatusCode(500);
         }
-
     }
-
 }
-
 
